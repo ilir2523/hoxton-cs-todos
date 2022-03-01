@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { describe, it, expect } from "vitest"
 import { addTodo, App, removeTodo, Todo } from "./App"
 
@@ -21,15 +21,20 @@ describe('removeTodo', () => {
 })
 
 describe('App', () => {
-    it('displays Todo app when the app loads', () => {
+    it('displays `Todo app` when the app loads', () => {
         render(<App />)
         const display = screen.getByTestId('header')
         expect(display.textContent).toBe('Todo app')
     })
 
-    it('displays button when the app loads', () => {
+    it('It add a todo when I press `ADD TODO` button', () => {
         render(<App />)
-        const display = screen.getByTestId('AddTodoBtn')
-        expect(display.textContent).toBe('ADD TODO')
+        const addTodoButton = screen.getByTestId('AddTodoBtn')
+        fireEvent.click(addTodoButton)
+        const todoLiEl = screen.getByTestId(`todo-1`)
+        expect(todoLiEl.textContent).toContain('New todo, yay!')
+        const removeTodoButton = screen.getByTestId(`removeTodo-1`)
+        expect(removeTodoButton.textContent).toContain('X')
+        expect(todoLiEl).toBeUndefined
     })
 })
